@@ -8,17 +8,13 @@ body {
 }
 
 .page-header {
-    background-color: #ff9400;
+    background-color: #D8BFD8;
     margin-top: 0;
-    margin-bottom: 40px;
     padding: 20px 20px 20px 40px;
 }
 
-.page-header h1,
-.page-header h1 a,
-.page-header h1 a:visited,
-.page-header h1 a:active {
-    color: #ffffff;
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #2F2F2F;
     font-size: 36pt;
     text-decoration: none;
 }
