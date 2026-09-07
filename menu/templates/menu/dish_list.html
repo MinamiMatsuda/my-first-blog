@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登録した料理一覧 - チヨちゃんの絶品晩ご飯</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #fff0f5; 
+            font-family: 'Zen Maru Gothic', sans-serif;
+            color: #333333;
+        }
+        .header-bar { 
+            background-color: #ffe4e8; 
+            padding: 16px 0; 
+            border-bottom: 2px solid #ffccd5; 
+        }
+        .app-title { font-weight: 700; color: #4a3b32; }
+        .card { 
+            border-radius: 14px; 
+            border: 1px solid #ffe0e6; 
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2); 
+        }
+        .btn-pink {
+            background-color: #ff6b81;
+            border-color: #ff6b81;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .btn-pink:hover {
+            background-color: #ee5253;
+            border-color: #ee5253;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-bar text-center mb-4 shadow-sm">
+        <h1 class="h4 mb-0 app-title">チヨちゃんの料理レパートリー 📖</h1>
+        <p class="text-muted small mb-0 mt-1">全 {{ dishes|length }} 品</p>
+    </header>
+
+    <main class="container" style="max-width: 540px;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{% url 'today_menu' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">← 今日の提案に戻る</a>
+            <a href="{% url 'add_dish' %}" class="btn btn-pink btn-sm rounded-pill px-3">+ 新しい料理</a>
+        </div>
+
+        {% for dish in dishes %}
+            <div class="card mb-2">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h2 class="h6 fw-bold mb-1 text-dark">{{ dish.name }}</h2>
+                        <span class="small text-muted">
+                            {% if dish.last_cooked_date %}
+                                最後: {{ dish.last_cooked_date|date:"n月j日" }}
+                            {% else %}
+                                <span class="badge bg-light text-muted border">未作成</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if dish.memo %}
+                        <p class="small text-secondary mb-0 mt-1 bg-light px-2 py-1 rounded">{{ dish.memo }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-light border text-center py-4">
+                まだ料理が登録されていません。<br>
+                右上の「+ 新しい料理」から追加してみてね！
+            </div>
+        {% endfor %}
+
+        <div class="text-center mt-4 mb-5">
+            <a href="{% url 'today_menu' %}" class="btn btn-outline-dark btn-sm rounded-pill px-4">今日の提案画面へ</a>
+        </div>
+    </main>
+</body>
+</html>

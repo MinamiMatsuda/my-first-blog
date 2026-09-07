@@ -13,9 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* ページ全体の文字をすべて「ゼンまるゴシック」に統一 */
         body { 
-            background-color: #fff0f5; /* 優しい薄ピンク */
+            background-color: #fff0f5; 
             font-family: 'Zen Maru Gothic', sans-serif;
             color: #333333;
         }
@@ -92,8 +91,9 @@
             </div>
         {% endfor %}
 
-        <div class="text-center mt-4 mb-5">
-            <a href="{% url 'add_dish' %}" class="btn btn-outline-dark btn-sm rounded-pill px-4">+ 新しい料理を登録する</a>
+        <div class="text-center mt-4 mb-5 d-flex justify-content-center gap-2">
+            <a href="{% url 'add_dish' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">+ 新しい料理</a>
+            <a href="{% url 'dish_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">📖 料理リスト</a>
         </div>
     </main>
 </body>

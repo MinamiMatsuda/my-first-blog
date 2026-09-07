@@ -25,7 +25,6 @@ def cook_dish(request, pk):
     dish.save()
     return redirect('today_menu')
 
-# ログイン不要で誰でも料理を登録できる画面
 def add_dish(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -35,3 +34,9 @@ def add_dish(request):
             return redirect('today_menu')
 
     return render(request, 'menu/add_dish.html')
+
+# 登録された料理の一覧を表示する画面
+def dish_list(request):
+    # 登録されている全料理を取得（名前順）
+    dishes = Dish.objects.all().order_by('name')
+    return render(request, 'menu/dish_list.html', {'dishes': dishes})
