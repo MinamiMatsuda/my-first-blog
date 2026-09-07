@@ -9,9 +9,7 @@ def today_menu(request):
 
     recommendations = []
     if dishes:
-        # 最後に作った日が古いもの（または未設定）順に並べ替え
         dishes.sort(key=lambda d: d.last_cooked_date or timezone.datetime.min.date())
-        # ごぶさたな上位候補（最大6品）の中から重ならないようにランダムで最大3品選出
         candidate_pool = dishes[:6]
         sample_count = min(3, len(candidate_pool))
         recommendations = random.sample(candidate_pool, sample_count)
@@ -26,3 +24,14 @@ def cook_dish(request, pk):
     dish.last_cooked_date = timezone.now().date()
     dish.save()
     return redirect('today_menu')
+
+# ログイン不要で誰でも料理を登録できる画面
+def add_dish(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        memo = request.POST.get('memo', '')
+        if name:
+            Dish.objects.create(name=name, memo=memo)
+            return redirect('today_menu')
+
+    return render(request, 'menu/add_dish.html')
