@@ -1,9 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.utils import timezone
 from .models import Dish
 import random
 
+# あなたとお母さんだけの秘密の合言葉
+SECRET_KEY_VALUE = 'chiyo2026'
+
+def verify_key(request):
+    # URLの ?key= またはクッキー（記憶）で合言葉が合っているかチェック
+    return request.GET.get('key') == SECRET_KEY_VALUE or request.session.get('authorized') == True
+
 def today_menu(request):
+    # 合言葉のチェック（初回はURL、2回目以降はセッションで記憶）
+    if request.GET.get('key') == SECRET_KEY_VALUE:
+        request.session['authorized'] = True
+
+    if not request.session.get('authorized'):
+        raise Http404("ページが見つかりません")
+
     today = timezone.now().date()
     dishes = list(Dish.objects.all())
 
@@ -20,12 +35,18 @@ def today_menu(request):
     })
 
 def cook_dish(request, pk):
+    if not request.session.get('authorized'):
+        raise Http404("ページが見つかりません")
+
     dish = get_object_or_404(Dish, pk=pk)
     dish.last_cooked_date = timezone.now().date()
     dish.save()
     return redirect('today_menu')
 
 def add_dish(request):
+    if not request.session.get('authorized'):
+        raise Http404("ページが見つかりません")
+
     if request.method == 'POST':
         name = request.POST.get('name')
         memo = request.POST.get('memo', '')
@@ -35,8 +56,9 @@ def add_dish(request):
 
     return render(request, 'menu/add_dish.html')
 
-# 登録された料理の一覧を表示する画面
 def dish_list(request):
-    # 登録されている全料理を取得（名前順）
+    if not request.session.get('authorized'):
+        raise Http404("ページが見つかりません")
+
     dishes = Dish.objects.all().order_by('name')
     return render(request, 'menu/dish_list.html', {'dishes': dishes})
